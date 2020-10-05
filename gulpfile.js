@@ -118,14 +118,15 @@ exports.copy = copy;
 exports.js = js;
 exports.clean = clean;
 
-
-exports.build = gulp.series (
+const build = gulp.series (
   clean,
+  html,
   copy,
   css,
-  sprite,
-  html
+  sprite
 );
+
+exports.build = build;
 
 exports.start = gulp.series (
   build, browserSync
