@@ -1,5 +1,4 @@
 'use strict';
-// объявили что будем использовать
 
 const gulp = require('gulp');
 const plumber = require('gulp-plumber');
@@ -24,9 +23,7 @@ const svgstore = require('gulp-svgstore');
 const posthtml = require('gulp-posthtml');
 const include = require('posthtml-include');
 
-//стили берутся из style.scss - обрабатываются и минифицируются
-
-  const css = () =>    {
+const css = () =>    {
   return gulp.src('source/sass/style.scss')
     .pipe(plumber())
     .pipe(sourcemap.init())
@@ -40,8 +37,6 @@ const include = require('posthtml-include');
     .pipe(server.stream())
 }
 
-//запускаем server, который делает все обнавления в браузере
-//запускаем watcher, который следит за ресурсами
 const browserSync = () =>  {
   server.init({
     server: 'build/',
@@ -84,7 +79,6 @@ const sprite = () => {
     .pipe(gulp.dest('build/img'));
 }
 
-//берет html собирает минифицирует
 const html = () => {
   return gulp.src('source/*.html')
     .pipe(posthtml([
@@ -92,10 +86,6 @@ const html = () => {
     ]))
     .pipe(gulp.dest('build'));
 }
-
-
-
-//берутся копируются шрифты и картинки
 
 const copy = () => {
   return gulp.src([
@@ -108,8 +98,6 @@ const copy = () => {
   .pipe(gulp.dest('build'));
 }
 
-//берется java script преобразуется ES5 - минифицируется и пишется
-
 const js = () =>  {
   return gulp.src('source/js/**')
   .pipe(gulp.dest('build/js'));
@@ -118,10 +106,6 @@ const js = () =>  {
 const clean = () => {
   return del('build');
 }
-
-
-
-//Default
 
 exports.css = css;
 exports.browserSync = browserSync;
@@ -136,22 +120,13 @@ exports.clean = clean;
 
 
 exports.build = gulp.series (
-      clean,
-      copy,
-      css,
-      sprite,
-      html
-    );
-
-exports.start = gulp.series (
-  gulp.parallel (
-    clean,
-    copy,
-    css,
-    sprite,
-    html
-  ),
-    browserSync
+  clean,
+  copy,
+  css,
+  sprite,
+  html
 );
 
-
+exports.start = gulp.series (
+  build, browserSync
+);
